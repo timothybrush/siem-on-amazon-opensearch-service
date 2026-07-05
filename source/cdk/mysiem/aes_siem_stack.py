@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT-0
 __copyright__ = ('Copyright Amazon.com, Inc. or its affiliates. '
                  'All Rights Reserved.')
-__version__ = '2.10.4'
+__version__ = '2.10.5'
 __license__ = 'MIT-0'
 __author__ = 'Akihiro Nakajima'
 __url__ = 'https://github.com/aws-samples/siem-on-amazon-opensearch-service'
@@ -239,28 +239,13 @@ class MyAesSiemStack(cdk.Stack):
         for acct in no_alb_log_account_list:
             elb_map_temp[acct] = '999999999999'
         region_dict = {}
-        # https://aws-data-wrangler.readthedocs.io/en/stable/layers.html
         for region in elb_map_temp:
             # ELB account ID
             region_dict[region] = {'ElbV2AccountId': elb_map_temp[region]}
-            arm = aws_lambda.Architecture.ARM_64.name
-            x86 = aws_lambda.Architecture.X86_64.name
-            # Lambda Arch
-            if region in ('af-south-1', 'ap-east-1',
-                          'ap-northeast-1', 'ap-northeast-2', 'ap-northeast-3',
-                          'ap-south-1', 'ap-south-2',
-                          'ap-southeast-1', 'ap-southeast-2', 'ap-southeast-3',
-                          'ap-southeast-4',
-                          'ca-central-1', 'ca-west-1',
-                          'eu-central-1', 'eu-north-1', 'eu-central-2',
-                          'eu-south-1', 'eu-south-2',
-                          'eu-west-1', 'eu-west-2', 'eu-west-3',
-                          'il-central-1',
-                          'me-central-1', 'me-south-1', 'sa-east-1',
-                          'us-east-1', 'us-east-2', 'us-west-1', 'us-west-2'):
-                region_dict[region]['LambdaArch'] = arm
-            else:
-                region_dict[region]['LambdaArch'] = x86
+        # Note: Lambda arm64 (Graviton) is now available in all supported
+        # regions including GovCloud and China, so the per-region
+        # architecture mapping (LambdaArch) was removed. All Lambda
+        # functions specify architecture=ARM_64 directly.
         region_mapping = cdk.CfnMapping(
             scope=self, id='RegionMap', mapping=region_dict)
 
@@ -612,16 +597,6 @@ class MyAesSiemStack(cdk.Stack):
             )
         )
 
-        has_lambda_architectures_prop = cdk.CfnCondition(
-            self, "HasLambdaArchitecturesProp",
-            expression=cdk.Fn.condition_not(
-                cdk.Fn.condition_or(
-                    cdk.Fn.condition_equals(cdk.Aws.REGION, 'ap-dummy-99'),
-                    # cdk.Fn.condition_equals(cdk.Aws.REGION, 'il-central-1'),
-                )
-            )
-        )
-
         is_serverless = cdk.CfnCondition(
             self, 'IsServerless',
             expression=cdk.Fn.condition_equals(
@@ -763,7 +738,6 @@ class MyAesSiemStack(cdk.Stack):
         cfn_conditions_dict = {
             'is_global_region': is_global_region,
             'is_china_region': is_china_region,
-            'has_lambda_architectures_prop': has_lambda_architectures_prop,
             'is_serverless': is_serverless,
             'is_managed_cluster': is_managed_cluster,
             'has_vpce': has_vpce,
@@ -1232,7 +1206,8 @@ class MyAesSiemStack(cdk.Stack):
             self, 'LambdaEsLoader',
             function_name=function_name,
             description=f'{SOLUTION_NAME} / es-loader',
-            runtime=aws_lambda.Runtime.PYTHON_3_11,
+            runtime=aws_lambda.Runtime.PYTHON_3_14,
+            architecture=aws_lambda.Architecture.ARM_64,
             code=aws_lambda.Code.from_asset('../lambda/es_loader'),
             handler='index.lambda_handler',
             memory_size=2048,
@@ -1272,14 +1247,6 @@ class MyAesSiemStack(cdk.Stack):
         )
         if not same_lambda_func_version(function_name):
             lambda_es_loader.current_version
-        lambda_es_loader.node.default_child.add_property_override(
-            "Architectures",
-            cdk.Fn.condition_if(
-                has_lambda_architectures_prop.logical_id,
-                [region_mapping.find_in_map(cdk.Aws.REGION, 'LambdaArch')],
-                cdk.Aws.NO_VALUE
-            )
-        )
         lambda_es_loader.node.default_child.add_property_override(
             "VpcConfig.SubnetIds",
             validated_resource.get_att('subnets').to_string()

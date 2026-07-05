@@ -92,20 +92,16 @@ SIEM on OpenSearch Service 能夠加載並關聯以下日誌類型。
 
 我們需要使用以下實例與工具創建CloudFormation模板:
 
-* 運行Amazon Linux 2的Amazon EC2實例
+* 運行Amazon Linux 2023的Amazon EC2實例
   * "Development Tools"
-  * Python 3.8
-  * Python 3.8 庫與頭文件
+  * Python 3.14
+  * Python 3.14 庫與頭文件
   * Git
 
 如果尚未安裝以上工具，請運行下列命令：
 
 ```shell
-sudo yum groups mark install -y "Development Tools"
-sudo yum install -y amazon-linux-extras
-sudo amazon-linux-extras enable python3.8
-sudo yum install -y python38 python38-devel git jq
-sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
+sudo dnf install -y python3.14 python3.14-devel python3.14-pip git jq tar
 ```
 
 #### 2-2. 複製SIEM on OpenSearch Service

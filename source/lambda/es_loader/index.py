@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: MIT-0
 __copyright__ = ('Copyright Amazon.com, Inc. or its affiliates. '
                  'All Rights Reserved.')
-__version__ = '2.10.4'
+__version__ = '2.10.5'
 __license__ = 'MIT-0'
 __author__ = 'Akihiro Nakajima'
 __url__ = 'https://github.com/aws-samples/siem-on-amazon-opensearch-service'
@@ -34,8 +34,8 @@ logger.info(f'boto3: {boto3.__version__}')
 warnings.filterwarnings("ignore", "No metrics to publish*")
 metrics = Metrics()
 
-if sys.version_info.major == 3 and sys.version_info.minor < 11:
-    msg = f"You are using Python {sys.version}. Please update to Python 3.11"
+if sys.version_info.major == 3 and sys.version_info.minor < 14:
+    msg = f"You are using Python {sys.version}. Please update to Python 3.14"
     logger.error(msg)
     time.sleep(30)
     sys.exit(0)
@@ -336,14 +336,14 @@ def bulkloads_into_opensearch(es_entries, collected_metrics):
         if output_size > 6000000:
             total_output_size += output_size
             try:
-                results = es_conn.bulk(putdata_list, filter_path=filter_path)
+                results = es_conn.bulk(body=putdata_list, params={"filter_path": ",".join(filter_path)})
             except (AuthorizationException, AuthenticationException) as err:
                 logger.warning(
                     'AuthN or AuthZ Exception raised due to SigV4 issue. '
                     f'http_compress has been disabled. {err}')
                 es_conn = utils.create_es_conn(
                     awsauth, ES_HOSTNAME, http_compress=False)
-                results = es_conn.bulk(putdata_list, filter_path=filter_path)
+                results = es_conn.bulk(body=putdata_list, params={"filter_path": ",".join(filter_path)})
             es_took, success, error, error_reasons, retry = check_es_results(
                 results, total_count)
             success_count += success
@@ -359,14 +359,14 @@ def bulkloads_into_opensearch(es_entries, collected_metrics):
     if output_size > 0:
         total_output_size += output_size
         try:
-            results = es_conn.bulk(putdata_list, filter_path=filter_path)
+            results = es_conn.bulk(body=putdata_list, params={"filter_path": ",".join(filter_path)})
         except (AuthorizationException, AuthenticationException) as err:
             logger.warning(
                 'AuthN or AuthZ Exception raised due to SigV4 issue. '
                 f'http_compress has been disabled. {err}')
             es_conn = utils.create_es_conn(
                 awsauth, ES_HOSTNAME, http_compress=False)
-            results = es_conn.bulk(putdata_list, filter_path=filter_path)
+            results = es_conn.bulk(body=putdata_list, params={"filter_path": ",".join(filter_path)})
         # logger.debug(results)
         es_took, success, error, error_reasons, retry = check_es_results(
             results, total_count)

@@ -68,7 +68,8 @@ zip -r configure-es-loader.zip user.ini
     * 名称：aes-siem-configure-es-loader（任意名称）
     * 检查上传 .zip 文件
     * 选择上传，然后选择 configure-es-loader.zip
-    * 兼容的运行时：选择 Python 3.11 and Python 3.13
+    * 兼容的运行时：留空。请 **不要** 选择任何运行时
+        * user.ini 是纯文本文件，不依赖于特定运行时。如果在此处选择运行时，将来 SIEM 更新更改 es-loader 运行时版本后，该层将不再显示在层选择列表中 (仍可通过直接指定 ARN 添加)。留空可使该层在任何运行时下都可见
 1. 选择[**Create**]
 
 最后，将刚刚创建的 Lambda 层添加到 Lambda 函数 es-loader：
@@ -315,10 +316,10 @@ Lambda 层的压缩文件内的目录结构应如下所示：
     ```python
     export GIT_ROOT=$HOME
     cd ${GIT_ROOT}/siem-on-amazon-opensearch-service/source/lambda/es_loader/
-    python3.11 -m pip install -r requirements.txt -U -t .
-    python3.11 -m pip install awswrangler -U
+    python3.14 -m pip install -r requirements.txt -U -t .
+    python3.14 -m pip install awswrangler -U
 
-    ln -sf /usr/bin/python3.11 ${GIT_ROOT}/siem-on-amazon-opensearch-service/python3
+    ln -sf /usr/bin/python3.14 ${GIT_ROOT}/siem-on-amazon-opensearch-service/python3
     PATH=${GIT_ROOT}/siem-on-amazon-opensearch-service/:$PATH
     ```
 

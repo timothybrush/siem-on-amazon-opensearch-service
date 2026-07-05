@@ -138,7 +138,7 @@ If you completed the initial setup using CloudFormation, move on to the next ste
 
 ### Checking es-loader Layer (Configuration File) Version
 
-The es-loader Lambda function currently specifies Python 3.11. The lambda layer for configuration file must be compatible with the same version. Check the [Compatible runtimes] of the relevant AWS Lambda layer and modify it to include the same version if it's not already included.
+The es-loader Lambda function currently specifies Python 3.14. The lambda layer for configuration file must be compatible with the same version. Check the [Compatible runtimes] of the relevant AWS Lambda layer and modify it to include the same version if it's not already included.
 
 Reference: [Adding user.ini to an AWS Lambda layer (recommended)](docs/configure_siem.md#adding-userini-to-an-aws-lambda-layer-recommended)
 

@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT-0
 __copyright__ = ('Copyright Amazon.com, Inc. or its affiliates. '
                  'All Rights Reserved.')
-__version__ = '2.10.4'
+__version__ = '2.10.5'
 __license__ = 'MIT-0'
 __author__ = 'Akihiro Nakajima'
 __url__ = 'https://github.com/aws-samples/siem-on-amazon-opensearch-service'
@@ -30,7 +30,7 @@ LAMBDA_GET_WORKSPACES_INVENTORY = '''# Copyright Amazon.com, Inc. or its affilia
 # SPDX-License-Identifier: MIT-0
 __copyright__ = ('Copyright Amazon.com, Inc. or its affiliates. '
                  'All Rights Reserved.')
-__version__ = '2.10.4'
+__version__ = '2.10.5'
 __license__ = 'MIT-0'
 __author__ = 'Akihiro Nakajima'
 __url__ = 'https://github.com/aws-samples/siem-on-amazon-opensearch-service'
@@ -122,7 +122,7 @@ def lambda_handler(event, context):
 LAMBDA_GET_TRUSTEDADVISOR_CHECK_RESULT = '''# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: MIT-0
 __copyright__ = 'Amazon.com, Inc. or its affiliates'
-__version__ = '2.10.4'
+__version__ = '2.10.5'
 __license__ = 'MIT-0'
 __author__ = 'Katsuya Matsuoka'
 __url__ = 'https://github.com/aws-samples/siem-on-amazon-opensearch-service'
@@ -198,7 +198,8 @@ def query_and_transform_and_save(f, check):
         checkId=check['id'])
     jsonobj = {
         'requestid': res['ResponseMetadata']['RequestId'],
-        'creation_date': datetime.datetime.utcnow().isoformat(),
+        'creation_date': datetime.datetime.now(
+            datetime.timezone.utc).replace(tzinfo=None).isoformat(),
         'account': AWS_ID, 'check': check, 'result': copy.copy(res['result']),
         'refreshable': check['id'] not in UNREFRESHABLE_CHECK_IDS}
     if is_enable_japanese:
@@ -448,10 +449,12 @@ class EventBridgeEventsExporterStack(MyStack):
             )
         )
 
-        kdf_to_s3_target = aws_events_targets.KinesisFirehoseStreamV2(
-            stream=aws_kinesisfirehose.DeliveryStream.from_delivery_stream_arn(
-                self, "KdfTarget",
-                delivery_stream_arn=kdf_to_s3.attr_arn
+        kdf_to_s3_target = aws_events_targets.FirehoseDeliveryStream(
+            delivery_stream=(
+                aws_kinesisfirehose.DeliveryStream.from_delivery_stream_arn(
+                    self, "KdfTarget",
+                    delivery_stream_arn=kdf_to_s3.attr_arn
+                )
             )
         )
 
@@ -605,7 +608,8 @@ class WorkSpacesLogExporterStack(MyStack):
         # Lambda Functions to get workspaces inventory
         lambda_func = aws_lambda.Function(
             self, 'lambdaGetWorkspacesInventory',
-            runtime=aws_lambda.Runtime.PYTHON_3_11,
+            runtime=aws_lambda.Runtime.PYTHON_3_14,
+            architecture=aws_lambda.Architecture.ARM_64,
             code=aws_lambda.InlineCode(LAMBDA_GET_WORKSPACES_INVENTORY),
             function_name='siem-get-workspaces-inventory',
             description='SIEM: get workspaces inventory',
@@ -637,10 +641,12 @@ class WorkSpacesLogExporterStack(MyStack):
             )
         )
 
-        kdf_to_s3_target = aws_events_targets.KinesisFirehoseStreamV2(
-            stream=aws_kinesisfirehose.DeliveryStream.from_delivery_stream_arn(
-                self, "KDFForWorkSpacesEventTarget",
-                delivery_stream_arn=kdf_to_s3.attr_arn
+        kdf_to_s3_target = aws_events_targets.FirehoseDeliveryStream(
+            delivery_stream=(
+                aws_kinesisfirehose.DeliveryStream.from_delivery_stream_arn(
+                    self, "KDFForWorkSpacesEventTarget",
+                    delivery_stream_arn=kdf_to_s3.attr_arn
+                )
             )
         )
 
@@ -705,7 +711,8 @@ class TrustedAdvisorLogExporterStack(MyStack):
         # Lambda Functions to get trustedadvisor check result
         lambda_func = aws_lambda.Function(
             self, 'lambdaGetTrustedAdvisorCheckResult',
-            runtime=aws_lambda.Runtime.PYTHON_3_11,
+            runtime=aws_lambda.Runtime.PYTHON_3_14,
+            architecture=aws_lambda.Architecture.ARM_64,
             code=aws_lambda.InlineCode(LAMBDA_GET_TRUSTEDADVISOR_CHECK_RESULT),
             function_name='siem-get-trustedadvisor-check-result',
             description='SIEM: get trustedadvisor check result',

@@ -1,7 +1,7 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: MIT-0
 __copyright__ = 'Amazon.com, Inc. or its affiliates'
-__version__ = '2.10.4'
+__version__ = '2.10.5'
 __license__ = 'MIT-0'
 __author__ = 'Katsuya Matsuoka'
 __url__ = 'https://github.com/aws-samples/siem-on-amazon-opensearch-service'
@@ -77,7 +77,8 @@ def query_and_transform_and_save(f, check):
         checkId=check['id'])
     jsonobj = {
         'requestid': res['ResponseMetadata']['RequestId'],
-        'creation_date': datetime.datetime.utcnow().isoformat(),
+        'creation_date': datetime.datetime.now(
+            datetime.timezone.utc).replace(tzinfo=None).isoformat(),
         'account': AWS_ID, 'check': check, 'result': copy.copy(res['result']),
         'refreshable': check['id'] not in UNREFRESHABLE_CHECK_IDS}
     if is_enable_japanese:

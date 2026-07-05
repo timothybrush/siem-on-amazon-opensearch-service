@@ -1,4 +1,4 @@
-Description: "SIEM on Amazon OpenSearch Service v2.10.4: log exporter - Workspaces"
+Description: "SIEM on Amazon OpenSearch Service v2.10.5: log exporter - Workspaces"
 Parameters:
   cweRulesFrequency:
     Type: Number
@@ -63,13 +63,15 @@ Resources:
   lambdaGetWorkspacesInventory04954C41:
     Type: AWS::Lambda::Function
     Properties:
+      Architectures:
+        - arm64
       Code:
         ZipFile: |
           # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
           # SPDX-License-Identifier: MIT-0
           __copyright__ = ('Copyright Amazon.com, Inc. or its affiliates. '
                            'All Rights Reserved.')
-          __version__ = '2.10.4'
+          __version__ = '2.10.5'
           __license__ = 'MIT-0'
           __author__ = 'Akihiro Nakajima'
           __url__ = 'https://github.com/aws-samples/siem-on-amazon-opensearch-service'
@@ -167,7 +169,7 @@ Resources:
         Fn::GetAtt:
           - getWorkspacesInventoryRoleC66252C0
           - Arn
-      Runtime: python3.11
+      Runtime: python3.14
       Timeout: 600
     DependsOn:
       - getWorkspacesInventoryRoleC66252C0
@@ -284,6 +286,8 @@ Mappings:
       FirehoseCidrBlock: 13.244.121.224/27
     ap-east-1:
       FirehoseCidrBlock: 18.162.221.32/27
+    ap-east-2:
+      FirehoseCidrBlock: 43.212.53.160/27
     ap-northeast-1:
       FirehoseCidrBlock: 13.113.196.224/27
     ap-northeast-2:

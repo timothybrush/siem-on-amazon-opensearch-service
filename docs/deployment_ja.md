@@ -54,30 +54,14 @@
 
 ### 1. AWS CDK 実行環境の準備
 
-1. Amazon Linux 2023 または Amazon Linux 2 を実行させた Amazon Elastic Compute Cloud (Amazon EC2) インスタンスをデプロイしてください。インスタンスは 2 GB 以上のメモリが必要です
+1. Amazon Linux 2023 を実行させた Amazon Elastic Compute Cloud (Amazon EC2) インスタンスをデプロイしてください。インスタンスは 2 GB 以上のメモリが必要です
 1. AWS Identity and Access Management (IAM) で Admin 権限を持つロールを作成して、インスタンスにアタッチします
-1. シェルにログインして、開発ツール、Python 3.11 と開発ファイル、git、jq、tar をインストールし、ソースコードを GitHub から取得します
-
-    Amazon Linux 2023 の場合
+1. シェルにログインして、開発ツール、Python 3.14 と開発ファイル、git、jq、tar をインストールし、ソースコードを GitHub から取得します
 
     ```shell
     export GIT_ROOT=$HOME
     cd ${GIT_ROOT}
-    sudo dnf install -y python3.11 python3.11-devel python3.11-pip git jq tar
-    git clone https://github.com/aws-samples/siem-on-amazon-opensearch-service.git
-    ```
-
-    Amazon Linux 2 の場合
-
-    > **_Note:_** このソリューションでは、Amazon Linux 2 での CDK によるデプロイは deprecated です。Amazon Linux 2023 をお使いください。
-
-    ```shell
-    export GIT_ROOT=$HOME
-    cd ${GIT_ROOT}
-    sudo yum install -y amazon-linux-extras
-    sudo amazon-linux-extras enable python3.8
-    sudo yum install -y python38 python38-devel git jq tar
-    sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
+    sudo dnf install -y python3.14 python3.14-devel python3.14-pip git jq tar
     git clone https://github.com/aws-samples/siem-on-amazon-opensearch-service.git
     ```
 

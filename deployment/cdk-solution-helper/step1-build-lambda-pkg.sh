@@ -4,7 +4,21 @@
 
 shopt -s expand_aliases
 
-pip_ver="24.0"
+# Pin pip to a known-good version that supports the Python 3.14 Lambda runtime
+# (cp314 wheel tags). Update this together with the runtime version.
+pip_ver="26.1.2"
+
+# All Lambda functions run on arm64 (Graviton). Force pip to fetch
+# manylinux aarch64 wheels built for the Lambda runtime version so that
+# C-extension packages (e.g. maxminddb) match the Lambda architecture
+# even when this script runs on an x86 machine or an older interpreter.
+# Update --python-version together with the Lambda runtime version.
+pip_target_opts=(
+    --platform manylinux2014_aarch64
+    --implementation cp
+    --python-version "3.14"
+    --only-binary=:all:
+)
 
 repo_root="${PWD}/../.."
 source_template_dir="${PWD}/.."
@@ -13,16 +27,20 @@ source_dir="$source_template_dir/../source"
 # create virtual venv
 cd "$repo_root" || exit
 
-if python3 --version |grep '3.11' >/dev/null 2>&1; then
+# The Lambda packages do not depend on the build interpreter: pip fetches
+# cp314/aarch64 wheels via pip_target_opts above. Any Python >= 3.13 works,
+# so use what is already installed (e.g. Python 3.13 on AWS CloudShell)
+# instead of requiring python3.14 to be installed.
+if python3 -c 'import sys; sys.exit(0 if sys.version_info >= (3, 13) else 1)' >/dev/null 2>&1; then
   :
+elif [ -f "/usr/bin/python3.14" ]; then
+  alias python3='/usr/bin/python3.14'
+elif [ -f "/usr/bin/python3.13" ]; then
+  alias python3='/usr/bin/python3.13'
 elif [ -f "/usr/bin/python3.11" ]; then
   alias python3='/usr/bin/python3.11'
 elif [ -f "/usr/bin/python3.10" ]; then
   alias python3='/usr/bin/python3.10'
-elif [ -f "/usr/bin/python3.9" ]; then
-  alias python3='/usr/bin/python3.9'
-elif [ -f "/usr/bin/python3.8" ]; then
-  alias python3='/usr/bin/python3.8'
 else
   :
 fi
@@ -75,7 +93,8 @@ function pip_zip_for_lambda () {
         rm -fr "${dir}" "${basename}" "${basename}".py
     done
     if [ -e requirements.txt ]; then
-        python3 -m pip install -t . -r requirements.txt -U --disable-pip-version-check
+        python3 -m pip install -t . -r requirements.txt -U \
+            "${pip_target_opts[@]}" --disable-pip-version-check
     fi
 
     find . -name __pycache__ -print0 | xargs -0 rm -fr
@@ -90,7 +109,8 @@ function pip_zip_for_lambda () {
     if [ -d requests_aws4auth ]; then
         mv LICENSE README.md HISTORY.md requests_aws4auth-*-info/
     fi
-    if [ -d aws_lambda_powertools ]; then
+    if [ -d aws_lambda_powertools ] && [ -f THIRD-PARTY-LICENSES ]; then
+        # aws-lambda-powertools 3.x no longer ships THIRD-PARTY-LICENSES
         mv THIRD-PARTY-LICENSES aws_lambda_powertools-*-info/
     fi
     if [ -f "README.md.org" ]; then
@@ -135,7 +155,8 @@ function pip_zip_for_lambda_ioc () {
         rm -fr "${dir}" "${basename}" "${basename}".py
     done
     if [ -e requirements.txt ]; then
-        python3 -m pip install -t . -r requirements.txt -U --disable-pip-version-check
+        python3 -m pip install -t . -r requirements.txt -U \
+            "${pip_target_opts[@]}" --disable-pip-version-check
     fi
 
     find . -name __pycache__ -print0 | xargs -0 rm -fr
@@ -174,7 +195,9 @@ zip deploy_es/dashboard.ndjson.zip -jD ../saved_objects/dashboard.ndjson
 
 rm -f deploy_es/dashboard.serverless.zip
 cd ../saved_objects && echo "${PWD}"
-zip ../lambda/deploy_es/dashboard.serverless.zip -r config/opensearch_2.*
+# include all OpenSearch config versions (e.g. opensearch_3.5.0.ndjson).
+# "opensearch_2.*" missed 3.x configs. aes_*.ndjson is excluded by prefix.
+zip ../lambda/deploy_es/dashboard.serverless.zip -r config/opensearch_*.ndjson
 zip ../lambda/deploy_es/dashboard.serverless.zip -r each-dashboard
 zip ../lambda/deploy_es/dashboard.serverless.zip -r each-indexpattern-search
 cd ../lambda && echo "${PWD}"

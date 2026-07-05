@@ -76,9 +76,9 @@ zip -r configure-es-loader.zip user.ini
     * zipファイルのアップロードにチェック
     * アップロードを選択して、configure-es-loader.zip を選択
     * 互換性のあるアーキテクチャ: 空欄のまま。選択を **しない** でください
-    * 互換性のあるランタイム: [**Python 3.11**] と [**Python 3.13**] を選択 (**aes-siem-es-loader** 関数のバージョンを調べて、含める必要があります)
+    * 互換性のあるランタイム: 空欄のまま。選択を **しない** でください
+        * user.ini はテキストファイルであり特定のランタイムに依存しません。この項目は説明用のメタデータであり、レイヤーの動作には影響しません (どのランタイムを指定しても、または空欄でも、レイヤーの追加と実行時の読み込みは可能です)。将来 SIEM のアップデートで es-loader のランタイムバージョンが変わっても user.ini はそのまま有効です。特定バージョンを指定すると実際のランタイムと表示が食い違って誤解のもとになるため、空欄を推奨します
 1. [**作成**] を選択
-1. 作成後に画面左メニューの [レイヤー] を選択して、作成したランタイムの [互換性のあるバージョン] で上記バージョンが含んでいることを確認してください
 
 最後に、Lambda 関数 es-loader に、作成した Lambada レイヤーを設定します
 
@@ -793,10 +793,10 @@ S3 バケットに保存されているログをバッチで OpenSearch Service 
     ```python
     export GIT_ROOT=$HOME
     cd ${GIT_ROOT}/siem-on-amazon-opensearch-service/source/lambda/es_loader/
-    python3.11 -m pip install -r requirements.txt -U -t .
-    python3.11 -m pip install awswrangler -U
+    python3.14 -m pip install -r requirements.txt -U -t .
+    python3.14 -m pip install awswrangler -U
 
-    ln -sf /usr/bin/python3.11 ${GIT_ROOT}/siem-on-amazon-opensearch-service/python3
+    ln -sf /usr/bin/python3.14 ${GIT_ROOT}/siem-on-amazon-opensearch-service/python3
     PATH=${GIT_ROOT}/siem-on-amazon-opensearch-service/:$PATH
     ```
 
@@ -976,7 +976,7 @@ Amazon Linux 2023 を実行している Amazon Elastic Compute Cloud (Amazon EC2
 
 * Amazon Linux 2023 on Amazon EC2
   * "Development Tools"
-  * Python 3.11, libraries and header files
+  * Python 3.14, libraries and header files
   * pip
   * Git
 
@@ -986,7 +986,7 @@ Amazon Linux 2023 を実行している Amazon Elastic Compute Cloud (Amazon EC2
 export GIT_ROOT=$HOME
 cd ${GIT_ROOT}
 sudo dnf groupinstall -y "Development Tools"
-sudo dnf install -y python3.11 python3.11-devel python3.11-pip git jq tar
+sudo dnf install -y python3.14 python3.14-devel python3.14-pip git jq tar
 ```
 
 ### 2. SIEM on OpenSearch Service の clone

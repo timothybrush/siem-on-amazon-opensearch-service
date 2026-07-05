@@ -308,32 +308,38 @@ func_check_freespace
 
 echo "### 1. Setting Up the AWS CDK Execution Environment ###"
 if [ -n "$is_al2" ]; then
-  echo 'sudo yum groups mark install -y "Development Tools"'
-  sudo yum groups mark install -y "Development Tools" > /dev/null
-  echo -e "Done\n"
-
-  echo "sudo yum install -y amazon-linux-extras"
-  sudo yum install -y amazon-linux-extras > /dev/null
-  echo -e "Done\n"
-
-  echo "sudo amazon-linux-extras enable python3.8"
-  sudo amazon-linux-extras enable python3.8 > /dev/null
-  echo -e "Done\n"
-
-  echo "sudo yum install -y python38 python38-devel git jq"
-  sudo yum install -y python38 python38-devel git jq > /dev/null
-  echo -e "Done\n"
-
-  sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
-elif [ -n "$is_al2023" ]; then
-  echo 'sudo dnf groupinstall -y "Development Tools"'
-  #sudo dnf groupinstall -y "Development Tools" > /dev/null
-  echo -e "Done\n"
-
-  echo 'sudo dnf install -y python3.11 python3.11-devel python3.11-pip git jq tar'
-  sudo dnf install -y python3.11 python3.11-devel python3.11-pip git jq tar > /dev/null
-  echo -e "Done\n"
+  echo "ERROR: Amazon Linux 2 is not supported. This solution requires Python 3.13 or later," >&2
+  echo "       which is not available on Amazon Linux 2. Please use Amazon Linux 2023." >&2
+  exit 1
 fi
+echo 'sudo dnf groupinstall -y "Development Tools"'
+#sudo dnf groupinstall -y "Development Tools" > /dev/null
+echo -e "Done\n"
+
+# This script runs on AWS CloudShell and also on EC2 (Amazon Linux 2023).
+# CloudShell ships with Python 3.13 by default, while the default python3
+# on EC2/AL2023 is older. Python 3.13 or later is enough to build the
+# lambda packages and run the AWS CDK, so skip installing Python 3.14
+# only when a suitable interpreter with pip is already available.
+suitable_python=""
+for py in python3 python3.14 python3.13; do
+  if command -v "$py" > /dev/null 2>&1 \
+      && "$py" -c 'import sys; sys.exit(0 if sys.version_info >= (3, 13) else 1)' 2>/dev/null \
+      && { "$py" -m pip --version > /dev/null 2>&1 \
+           || "$py" -m ensurepip --version > /dev/null 2>&1; }; then
+    suitable_python=$py
+    break
+  fi
+done
+if [ -n "$suitable_python" ]; then
+  echo "${suitable_python} ($(${suitable_python} --version 2>&1 | awk '{print $2}')) is already installed. Skip installing python3.14"
+else
+  echo 'sudo dnf install -y python3.14 python3.14-devel python3.14-pip'
+  sudo dnf install -y python3.14 python3.14-devel python3.14-pip > /dev/null
+fi
+echo 'sudo dnf install -y git jq tar'
+sudo dnf install -y git jq tar > /dev/null
+echo -e "Done\n"
 
 if [ -d "$BASEDIR" ]; then
   echo "git rebase to get latest commit"
@@ -406,7 +412,8 @@ chmod +x ./step2-setup-cdk-env.sh && ./step2-setup-cdk-env.sh
 # shellcheck disable=SC1090
 if [[ "${AWS_EXECUTION_ENV}" != "CloudShell" ]]; then
   source ~/.bashrc
-  nvm use 18 2>/dev/null || nvm use 20 2>/dev/null || nvm use 16 2>/dev/null || nvm use system
+  # AWS CDK supports Node.js 20.x/22.x/24.x. Prefer the newest available.
+  nvm use 24 2>/dev/null || nvm use 22 2>/dev/null || nvm use 20 2>/dev/null || nvm use default 2>/dev/null || nvm use system
   echo -e "Done\n"
 fi
 find "$HOME" -name '.cache' -print0 | xargs --null rm -fr

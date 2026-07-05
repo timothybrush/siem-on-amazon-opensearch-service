@@ -36,7 +36,7 @@ On this page, we’ll walk you through how to load logs from each AWS service in
     * [Amazon OpenSearch Service](#amazon-opensearch-service)
     * [Amazon Managed Streaming for Apache Kafka (Amazon MSK)](#amazon-msk)
 1. [Compute](#8-compute)
-    * [EC2 Instance (Amazon Linux 2/2023)](#ec2-instance-amazon-linux-22023)
+    * [EC2 Instance (Amazon Linux 2023)](#ec2-instance-amazon-linux-2023)
     * [EC2 Instance (Microsoft Windows Server 2012/2016/2019)](#ec2-instance-microsoft-windows-server-201220162019)
     * [Apache Web Server on Amazon Linux](#apache-web-server-on-amazon-linux)
     * [NGINX Web Server on Amazon Linux](#nginx-web-server-on-amazon-linux)
@@ -91,8 +91,8 @@ The initial value of s3_key: `Inspector2_Finding` (specified in the Firehose out
 
 | No | CloudFormation | Description |
 |----------|----------------|---------------|
-| 1 |[![core resource](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/template?stackName=log-exporter-core-resource&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-core.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-core.template) | CloudFormation for core resource. This template gets the S3 bucket name of the log forwarding destination and creates IAM roles. Commonly used in other AWS service settings. |
-| 2 |[![eventbridge](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=log-exporter-eventbridge-events&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-eventbridge-events.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-eventbridge-events.template) | This template creates Firehose,set up EventBridge to deliver Events to the Firehose. A template common to Security Hub and Config Rules. |
+| 1 |[![core resource](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/template?stackName=log-exporter-core-resource&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-core.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-core.template) | CloudFormation for core resource. This template gets the S3 bucket name of the log forwarding destination and creates IAM roles. Commonly used in other AWS service settings. |
+| 2 |[![eventbridge](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=log-exporter-eventbridge-events&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-eventbridge-events.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-eventbridge-events.template) | This template creates Firehose,set up EventBridge to deliver Events to the Firehose. A template common to Security Hub and Config Rules. |
 
 ### AWS CloudHSM
 
@@ -104,8 +104,8 @@ The initial value of s3_key: `/CloudHSM/` (specified in the Firehose output path
 
 | No | CloudFormation | Description |
 |----------|----------------|---------------|
-| 1 |[![core resource](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/template?stackName=log-exporter-core-resource&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-core.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-core.template) | CloudFormation for core resource. This template gets the S3 bucket name of the log forwarding destination and creates IAM roles. Commonly used in other AWS service settings. |
-| 2 |[![cloudhsm](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=log-exporter-cloudhsm&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-cloudhsm-cwl.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-cloudhsm-cwl.template) | This template creates Firehose,set up CloudWatch Logs subscription filters to deliver CloudWatch Logs to the Firehose. The firehose exports logs to S3 bucket.|
+| 1 |[![core resource](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/template?stackName=log-exporter-core-resource&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-core.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-core.template) | CloudFormation for core resource. This template gets the S3 bucket name of the log forwarding destination and creates IAM roles. Commonly used in other AWS service settings. |
+| 2 |[![cloudhsm](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=log-exporter-cloudhsm&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-cloudhsm-cwl.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-cloudhsm-cwl.template) | This template creates Firehose,set up CloudWatch Logs subscription filters to deliver CloudWatch Logs to the Firehose. The firehose exports logs to S3 bucket.|
 
 ### AWS Directory Service
 
@@ -115,8 +115,8 @@ The initial value of s3_key : `/DirectoryService/MicrosoftAD/` (specified in the
 
 1. Navigate to the [Directory Service Console](https://console.aws.amazon.com/directoryservicev2/home?) and forward log to CloudWatch Logs.
 1. Configure with CloudFormation
-     * [siem-log-exporter-core.template](https://raw.githubusercontent.com/aws-samples/siem-on-amazon-opensearch-service/v2.10.4/deployment/log-exporter/siem-log-exporter-core.template)
-     * [siem-log-exporter-ad.template](https://raw.githubusercontent.com/aws-samples/siem-on-amazon-opensearch-service/v2.10.4/deployment/log-exporter/siem-log-exporter-ad.template)
+     * [siem-log-exporter-core.template](https://raw.githubusercontent.com/aws-samples/siem-on-amazon-opensearch-service/v2.10.5/deployment/log-exporter/siem-log-exporter-core.template)
+     * [siem-log-exporter-ad.template](https://raw.githubusercontent.com/aws-samples/siem-on-amazon-opensearch-service/v2.10.5/deployment/log-exporter/siem-log-exporter-ad.template)
 
 ### AWS WAF
 
@@ -193,8 +193,8 @@ The initial value of s3_key: `SecurityHub` or `securityhub` (specified in the Fi
 
 | No | CloudFormation | Description |
 |----------|----------------|---------------|
-| 1 |[![core resource](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/template?stackName=log-exporter-core-resource&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-core.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-core.template) | CloudFormation for core resource. This template gets the S3 bucket name of the log forwarding destination and creates IAM roles. Commonly used in other AWS service settings. |
-| 2 |[![eventbridge](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=log-exporter-eventbridge-events&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-eventbridge-events.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-eventbridge-events.template) | This template creates Firehose,set up EventBridge to deliver Events to the Firehose. A template common to Security Hub and Config Rules. |
+| 1 |[![core resource](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/template?stackName=log-exporter-core-resource&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-core.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-core.template) | CloudFormation for core resource. This template gets the S3 bucket name of the log forwarding destination and creates IAM roles. Commonly used in other AWS service settings. |
+| 2 |[![eventbridge](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=log-exporter-eventbridge-events&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-eventbridge-events.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-eventbridge-events.template) | This template creates Firehose,set up EventBridge to deliver Events to the Firehose. A template common to Security Hub and Config Rules. |
 
 #### Configure step by step (Security Hub)
 
@@ -313,8 +313,8 @@ The initial value of s3_key: `Config.*Rules` (specified in the Firehose output p
 
 | No | CloudFormation | Description |
 |----------|----------------|---------------|
-| 1 |[![core resource](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/template?stackName=log-exporter-core-resource&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-core.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-core.template) | CloudFormation for core resource. This template gets the S3 bucket name of the log forwarding destination and creates IAM roles. Commonly used in other AWS service settings. |
-| 2 |[![eventbridge](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=log-exporter-eventbridge-events&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-eventbridge-events.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-eventbridge-events.template) | This template creates Firehose,set up EventBridge to deliver Events to the Firehose. A template common to Security Hub and Config Rules. |
+| 1 |[![core resource](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/template?stackName=log-exporter-core-resource&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-core.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-core.template) | CloudFormation for core resource. This template gets the S3 bucket name of the log forwarding destination and creates IAM roles. Commonly used in other AWS service settings. |
+| 2 |[![eventbridge](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=log-exporter-eventbridge-events&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-eventbridge-events.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-eventbridge-events.template) | This template creates Firehose,set up EventBridge to deliver Events to the Firehose. A template common to Security Hub and Config Rules. |
 
 ### AWS Trusted Advisor
 
@@ -328,8 +328,8 @@ In order to collect Trusted Advisor results, the AWS support plan must be Busine
 
 | No | CloudFormation | Description |
 |----------|----------------|---------------|
-| 1 |[![core resource](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/template?stackName=log-exporter-core-resource&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-core.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-core.template) | CloudFormation for core resource. This template gets the S3 bucket name of the log forwarding destination and creates IAM roles. Commonly used in other AWS service settings. |
-| 2 |[![trustedadvisor](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=log-exporter-trustedadvisor&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-trustedadvisor.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-trustedadvisor.template) | This template creates Lambda,set up EventBridge to export Trusted Advisor check results to S3. |
+| 1 |[![core resource](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/template?stackName=log-exporter-core-resource&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-core.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-core.template) | CloudFormation for core resource. This template gets the S3 bucket name of the log forwarding destination and creates IAM roles. Commonly used in other AWS service settings. |
+| 2 |[![trustedadvisor](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=log-exporter-trustedadvisor&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-trustedadvisor.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-trustedadvisor.template) | This template creates Lambda,set up EventBridge to export Trusted Advisor check results to S3. |
 
 ## 4. Networking & Content Delivery
 
@@ -428,7 +428,7 @@ Configuring Amazon CloudFront:
 
 ### Route 53 Resolver VPC DNS Query Logging
 
-![Amazon Linux 2 to S3](images/route53resolver-to-s3.jpg)
+![Route 53 Resolver to S3](images/route53resolver-to-s3.jpg)
 
 The initial value of s3_key: `vpcdnsquerylogs` (part of the default output path)
 
@@ -534,8 +534,8 @@ The initial value of s3_key: `aws-fsx-`
 Amazon FSx for Windows File Server audit logs are exported from Kinesis Data Firehose to the S3 bucket. Kinesis Data Firehose names must start with [**aws-fsx-**], and because this prefix is included in the file names when they are output to the S3 bucket, we are using it to determine the log type.
 
 1. Configure with CloudFormation
-    * [siem-log-exporter-core.template](https://raw.githubusercontent.com/aws-samples/siem-on-amazon-opensearch-service/v2.10.4/deployment/log-exporter/siem-log-exporter-core.template)
-    * [siem-log-exporter-fsx.template](https://raw.githubusercontent.com/aws-samples/siem-on-amazon-opensearch-service/v2.10.4/deployment/log-exporter/siem-log-exporter-fsx.template)
+    * [siem-log-exporter-core.template](https://raw.githubusercontent.com/aws-samples/siem-on-amazon-opensearch-service/v2.10.5/deployment/log-exporter/siem-log-exporter-core.template)
+    * [siem-log-exporter-fsx.template](https://raw.githubusercontent.com/aws-samples/siem-on-amazon-opensearch-service/v2.10.5/deployment/log-exporter/siem-log-exporter-fsx.template)
 1. Navigate to the [FSx Console](https://console.aws.amazon.com/fsx/home?) and forward logs to Firehose.
 
 ### Amazon S3 access logs
@@ -590,8 +590,8 @@ The CloudFormation templates below creates a Firehose for each log type and expo
 
 | No | CloudFormation | Description |
 |----------|----------------|---------------|
-| 1 |[![core resource](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/template?stackName=log-exporter-core-resource&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-core.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-core.template) | CloudFormation for core resource. This template gets the S3 bucket name of the log forwarding destination and creates IAM roles. Commonly used in other AWS service settings. |
-| 2 |[![mysql](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=log-exporter-rds-mysql&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-rds-mysql-cwl.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-rds-mysql-cwl.template) | This template creates a Firehose for each type of log, set up CloudWatch Logs subscription filters to deliver CloudWatch Logs to the Firehose. The firehose exports RDS logs to S3 bucket.|
+| 1 |[![core resource](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/template?stackName=log-exporter-core-resource&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-core.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-core.template) | CloudFormation for core resource. This template gets the S3 bucket name of the log forwarding destination and creates IAM roles. Commonly used in other AWS service settings. |
+| 2 |[![mysql](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=log-exporter-rds-mysql&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-rds-mysql-cwl.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-rds-mysql-cwl.template) | This template creates a Firehose for each type of log, set up CloudWatch Logs subscription filters to deliver CloudWatch Logs to the Firehose. The firehose exports RDS logs to S3 bucket.|
 
 Destination S3 bucket:
 
@@ -642,8 +642,8 @@ The CloudFormation templates below creates a Firehose for each log type and expo
 
 | No | CloudFormation | Description |
 |----------|----------------|---------------|
-| 1 |[![core resource](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/template?stackName=log-exporter-core-resource&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-core.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-core.template) | CloudFormation for core resource. This template gets the S3 bucket name of the log forwarding destination and creates IAM roles. Commonly used in other AWS service settings. |
-| 2 |[![postgresql](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=log-exporter-rds-postgresql&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-rds-postgresql-cwl.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-rds-postgresql-cwl.template) | This template creates a Firehose for each type of log, set up CloudWatch Logs subscription filters to deliver CloudWatch Logs to the Firehose. The firehose exports RDS logs to S3 bucket.|
+| 1 |[![core resource](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/template?stackName=log-exporter-core-resource&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-core.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-core.template) | CloudFormation for core resource. This template gets the S3 bucket name of the log forwarding destination and creates IAM roles. Commonly used in other AWS service settings. |
+| 2 |[![postgresql](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=log-exporter-rds-postgresql&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-rds-postgresql-cwl.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-rds-postgresql-cwl.template) | This template creates a Firehose for each type of log, set up CloudWatch Logs subscription filters to deliver CloudWatch Logs to the Firehose. The firehose exports RDS logs to S3 bucket.|
 
 Destination S3 bucket:
 
@@ -689,9 +689,9 @@ To export OpenSearch audit logs to CloudWatch Logs, see Developer Guide [Monitor
 
 ## 8. Compute
 
-### EC2 Instance (Amazon Linux 2/2023)
+### EC2 Instance (Amazon Linux 2023)
 
-![Amazon Linux 2 to S3](images/al2-to-s3.jpg)
+![Amazon Linux 2023 to S3](images/al2-to-s3.jpg)
 
 * OS system logs
   * The initial value of s3_key: `/[Ll]inux/` (specified in the Firehose output path)
@@ -714,16 +714,11 @@ The following are examples of sending logs to the S3 log bucket from Amazon Linu
     * ssm:PutParameter
     * ssm:UpdateInstanceInformation
 
-1. Install CloudWatch Agent on EC2 instances deployed with Amazon Linux 2023 (AL2023) or Amazon Linux 2 (AL2). Install rsyslog additionally for AL2023.
+1. Install CloudWatch Agent on EC2 instances deployed with Amazon Linux 2023 (AL2023). Install rsyslog additionally.
 
     ```sh
     # Amazon Linux 2023
     sudo dnf install -y amazon-cloudwatch-agent rsyslog
-    ```
-
-    ```sh
-    # Amazon Linux 2
-    sudo yum install -y amazon-cloudwatch-agent
     ```
 
     For information, see the official documentations: [Installing the CloudWatch agent](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-on-EC2-Instance.html)
@@ -818,8 +813,8 @@ The following are examples of sending logs to the S3 log bucket from Amazon Linu
 
     | No | CloudFormation | Description |
     |----------|----------------|---------------|
-    | 1 |[![core resource](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/template?stackName=log-exporter-core-resource&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-core.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-core.template) | CloudFormation for core resource. This template gets the S3 bucket name of the log forwarding destination and creates IAM roles. Commonly used in other AWS service settings. |
-    | 2 |[![linux](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=log-exporter-linux&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-linux-cwl.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-linux-cwl.template) | This template creates two Firehose,set up CloudWatch Logs subscription filters to deliver CloudWatch Logs to the Firehose. The firehose exports linux logs to S3 bucket.|
+    | 1 |[![core resource](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/template?stackName=log-exporter-core-resource&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-core.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-core.template) | CloudFormation for core resource. This template gets the S3 bucket name of the log forwarding destination and creates IAM roles. Commonly used in other AWS service settings. |
+    | 2 |[![linux](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=log-exporter-linux&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-linux-cwl.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-linux-cwl.template) | This template creates two Firehose,set up CloudWatch Logs subscription filters to deliver CloudWatch Logs to the Firehose. The firehose exports linux logs to S3 bucket.|
 
     Destination S3 bucket:
     * [**AWSLogs/123456789012/EC2/Linux/System/[region]/**]
@@ -839,16 +834,16 @@ Here’s an outline of the steps:
 1. Install CloudWatch Agent in the EC2 instance deployed as Windows Server
 1. Forward logs to CloudWatch Logs
 1. Configure with CloudFormation
-    * [siem-log-exporter-core.template](https://raw.githubusercontent.com/aws-samples/siem-on-amazon-opensearch-service/v2.10.4/deployment/log-exporter/siem-log-exporter-core.template)
-    * [siem-log-exporter-cwl-nocompress.template](https://raw.githubusercontent.com/aws-samples/siem-on-amazon-opensearch-service/v2.10.4/deployment/log-exporter/siem-log-exporter-cwl-nocompress.template)
+    * [siem-log-exporter-core.template](https://raw.githubusercontent.com/aws-samples/siem-on-amazon-opensearch-service/v2.10.5/deployment/log-exporter/siem-log-exporter-core.template)
+    * [siem-log-exporter-cwl-nocompress.template](https://raw.githubusercontent.com/aws-samples/siem-on-amazon-opensearch-service/v2.10.5/deployment/log-exporter/siem-log-exporter-cwl-nocompress.template)
     * Prefix to output logs : [**AWSLogs/123456789012/EC2/Windows/Event/[region]/**]
         * Replace 123456789012 with your AWS account ID
 
 ### Apache Web Server on Amazon Linux
 
-You can import Apache logs that format is Common Log Format (CLF), Combined Log Format (combined), combinedio, and X-Forwarded-For added at the **beginning** installed on Amazon Linux 2023 or Amazon Linux 2.
+You can import Apache logs that format is Common Log Format (CLF), Combined Log Format (combined), combinedio, and X-Forwarded-For added at the **beginning** installed on Amazon Linux 2023.
 
-![Amazon Linux 2 to S3](images/al2-to-s3.jpg)
+![Amazon Linux 2023 to S3](images/al2-to-s3.jpg)
 
 * Apache access log
   * The initial value of s3_key: `[Aa]pache.*[Aa]ccess/` (specified in the Firehose output path)
@@ -863,7 +858,7 @@ If you want to collect all logs from multiple websites (e.g. blog.example.net, s
 
 1. Create an IAM role and attach it to an EC2 instance
 
-    See [EC2 Instance (Amazon Linux 2/2023)](#ec2-instance-amazon-linux-22023)
+    See [EC2 Instance (Amazon Linux 2023)](#ec2-instance-amazon-linux-2023)
 
 1. Install Apache Web Server
 
@@ -875,7 +870,7 @@ If you want to collect all logs from multiple websites (e.g. blog.example.net, s
 
     The steps are an example configuration to forward logs to CloudWatch Logs. Please change the input values ​​as appropriate, including settings for Cloud Watch Metrics, etc. Save your configuration in AWS Systems Manager Parameter Store. Subsequent EC2 instances use configuration files saved in Parameter Store, so this step is not necessary.
 
-    If you also want to transfer Linux OS logs, please refer to [EC2 Instance (Amazon Linux 2/2023)](#ec2-instance-amazon-linux-22023) and combine them.
+    If you also want to transfer Linux OS logs, please refer to [EC2 Instance (Amazon Linux 2023)](#ec2-instance-amazon-linux-2023) and combine them.
 
     ```sh
     sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-config-wizard
@@ -953,8 +948,8 @@ If you want to collect all logs from multiple websites (e.g. blog.example.net, s
 
     | No | CloudFormation | Description |
     |----------|----------------|---------------|
-    | 1 |[![core resource](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/template?stackName=log-exporter-core-resource&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-core.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-core.template) | CloudFormation for core resource. This template gets the S3 bucket name of the log forwarding destination and creates IAM roles. Commonly used in other AWS service settings. |
-    | 2 |[![apache](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=log-exporter-apache&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-apache-cwl.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-apache-cwl.template) | This template creates two Firehose,set up CloudWatch Logs subscription filters to deliver CloudWatch Logs to the Firehose. The firehose exports apache logs to S3 bucket.|
+    | 1 |[![core resource](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/template?stackName=log-exporter-core-resource&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-core.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-core.template) | CloudFormation for core resource. This template gets the S3 bucket name of the log forwarding destination and creates IAM roles. Commonly used in other AWS service settings. |
+    | 2 |[![apache](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=log-exporter-apache&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-apache-cwl.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-apache-cwl.template) | This template creates two Firehose,set up CloudWatch Logs subscription filters to deliver CloudWatch Logs to the Firehose. The firehose exports apache logs to S3 bucket.|
 
     Destination S3 bucket:
     * [ **AWSLogs/aws-account-id=123456789012/service=apache-access/web-site-name=[sitename]/aws-region=[region]/** ]
@@ -963,9 +958,9 @@ If you want to collect all logs from multiple websites (e.g. blog.example.net, s
 
 ### NGINX Web Server on Amazon Linux
 
-You can import NGINX logs that format is Combined Log Format (combined) and X-Forwarded-For added at the **end** installed on Amazon Linux 2023 or Amazon Linux 2.
+You can import NGINX logs that format is Combined Log Format (combined) and X-Forwarded-For added at the **end** installed on Amazon Linux 2023.
 
-![Amazon Linux 2 to S3](images/al2-to-s3.jpg)
+![Amazon Linux 2023 to S3](images/al2-to-s3.jpg)
 
 * NGINX access log
   * The initial value of s3_key: `[Nn]ginx.*[Aa]ccess/` (specified in the Firehose output path)
@@ -980,7 +975,7 @@ If you want to collect all logs from multiple websites (e.g. blog.example.net, s
 
 1. Create an IAM role and attach it to an EC2 instance
 
-    See [EC2 Instance (Amazon Linux 2/2023)](#ec2-instance-amazon-linux-22023)
+    See [EC2 Instance (Amazon Linux 2023)](#ec2-instance-amazon-linux-2023)
 
 1. Install NGINX Web Server
 
@@ -1006,7 +1001,7 @@ If you want to collect all logs from multiple websites (e.g. blog.example.net, s
 
     The steps are an example configuration to forward logs to CloudWatch Logs. Please change the input values ​​as appropriate, including settings for Cloud Watch Metrics, etc. Save your configuration in AWS Systems Manager Parameter Store. Subsequent EC2 instances use configuration files saved in Parameter Store, so this step is not necessary.
 
-    If you also want to transfer Linux OS logs, please refer to [EC2 Instance (Amazon Linux 2/2023)](#ec2-instance-amazon-linux-22023) and combine them.
+    If you also want to transfer Linux OS logs, please refer to [EC2 Instance (Amazon Linux 2023)](#ec2-instance-amazon-linux-2023) and combine them.
 
     ```sh
     sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-config-wizard
@@ -1125,8 +1120,8 @@ If you want to collect all logs from multiple websites (e.g. blog.example.net, s
 
     | No | CloudFormation | Description |
     |----------|----------------|---------------|
-    | 1 |[![core resource](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/template?stackName=log-exporter-core-resource&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-core.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-core.template) | CloudFormation for core resource. This template gets the S3 bucket name of the log forwarding destination and creates IAM roles. Commonly used in other AWS service settings. |
-    | 2 |[![nginx](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=log-exporter-nginx&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-nginx-cwl.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.4/log-exporter/siem-log-exporter-nginx-cwl.template) | This template creates two Firehose,set up CloudWatch Logs subscription filters to deliver CloudWatch Logs to the Firehose. The firehose exports nginx logs to S3 bucket.|
+    | 1 |[![core resource](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/create/template?stackName=log-exporter-core-resource&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-core.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-core.template) | CloudFormation for core resource. This template gets the S3 bucket name of the log forwarding destination and creates IAM roles. Commonly used in other AWS service settings. |
+    | 2 |[![nginx](./images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=log-exporter-nginx&templateURL=https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-nginx-cwl.template) [link](https://aes-siem.s3.ap-northeast-1.amazonaws.com/siem-on-amazon-opensearch-service/v2.10.5/log-exporter/siem-log-exporter-nginx-cwl.template) | This template creates two Firehose,set up CloudWatch Logs subscription filters to deliver CloudWatch Logs to the Firehose. The firehose exports nginx logs to S3 bucket.|
 
     Destination S3 bucket:
     * [ **AWSLogs/aws-account-id=123456789012/service=nginx-access/web-site-name=[sitename]/aws-region=[region]/** ]
@@ -1184,8 +1179,8 @@ The initial value of s3_key : `(WorkSpaces|workspaces).*(Event|event)` (specifie
 The initial value of s3_key : `(WorkSpaces|workspaces).*(Inventory|inventory)`
 
 1. Configure with CloudFormation
-    * [siem-log-exporter-core.template](https://raw.githubusercontent.com/aws-samples/siem-on-amazon-opensearch-service/v2.10.4/deployment/log-exporter/siem-log-exporter-core.template)
-    * [siem-log-exporter-workspaces.template](https://raw.githubusercontent.com/aws-samples/siem-on-amazon-opensearch-service/v2.10.4/deployment/log-exporter/siem-log-exporter-workspaces.template)
+    * [siem-log-exporter-core.template](https://raw.githubusercontent.com/aws-samples/siem-on-amazon-opensearch-service/v2.10.5/deployment/log-exporter/siem-log-exporter-core.template)
+    * [siem-log-exporter-workspaces.template](https://raw.githubusercontent.com/aws-samples/siem-on-amazon-opensearch-service/v2.10.5/deployment/log-exporter/siem-log-exporter-workspaces.template)
 
 ## 11. Multiple regions / multiple accounts
 

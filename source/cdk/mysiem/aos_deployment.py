@@ -296,7 +296,9 @@ class AosDeployment(object):
             runtime=aws_lambda.Runtime.PYTHON_3_11,
             code=aws_lambda.Code.from_asset('../lambda/deploy_es'),
             handler='index.aes_domain_handler',
-            memory_size=128,
+            # 256 MB: shares the same code bundle as aes-siem-configure-aes
+            # whose baseline memory usage was close to 128 MB. issue #481
+            memory_size=256,
             timeout=cdk.Duration.seconds(300),
             reserved_concurrent_executions=1,
             environment={

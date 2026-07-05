@@ -6,6 +6,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.5] - 2026-07-05
+### Added
+- Added support for OpenSearch Dashboards 3.5 (Single OpenSearch Dashboards).
+
+### Changed
+- Changed Lambda runtime from Python 3.11 to Python 3.14
+- Changed Lambda instruction set architectures to Arm64 in all regions including GovCloud and China, and removed the per-region architecture mapping
+- Updated node version from 20/22 to 24
+- Updated opensearch-py to 3.2.0, boto3/botocore to 1.43.39 and other dependencies
+
+### Removed
+- Removed Amazon Linux 2 from build and deployment environments. Setup scripts now exit with an error on Amazon Linux 2
+
+### Fixed
+- Fixed Runtime.OutOfMemory error of aes-siem-configure-aes by increasing memory size from 128 MB to 1,024 MB #481
+
 ## [2.10.4] - 2025-06-01
 ### Added
 - Added support for Amazon OpenSearch 2.13/2.15/2.17/2.19 #460,#469

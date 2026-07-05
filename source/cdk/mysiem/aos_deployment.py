@@ -47,8 +47,6 @@ class AosDeployment(object):
 
         self.is_serverless = cfn_conditions_dict['is_serverless']
         self.is_in_vpc = cfn_conditions_dict['is_in_vpc']
-        self.has_lambda_architectures_prop = (
-            cfn_conditions_dict['has_lambda_architectures_prop'])
         self.is_global_region = cfn_conditions_dict['is_global_region']
 
         self.aes_siem_snapshot_role = aes_siem_snapshot_role
@@ -293,7 +291,8 @@ class AosDeployment(object):
             self.scope, 'LambdaDeployAES',
             function_name=function_name,
             description=f'{self.SOLUTION_NAME} / opensearch domain deployment',
-            runtime=aws_lambda.Runtime.PYTHON_3_11,
+            runtime=aws_lambda.Runtime.PYTHON_3_14,
+            architecture=aws_lambda.Architecture.ARM_64,
             code=aws_lambda.Code.from_asset('../lambda/deploy_es'),
             handler='index.aes_domain_handler',
             # 256 MB: shares the same code bundle as aes-siem-configure-aes
@@ -321,18 +320,6 @@ class AosDeployment(object):
         )
         if not self.same_lambda_func_version(function_name):
             lambda_deploy_es.current_version
-        lambda_deploy_es.node.default_child.add_property_override(
-            "Architectures",
-            cdk.Fn.condition_if(
-                self.has_lambda_architectures_prop.logical_id,
-                [self.region_mapping.find_in_map(
-                    cdk.Aws.REGION, 'LambdaArch')],
-                cdk.Aws.NO_VALUE
-            )
-        )
-        # lambda_deploy_es.node.default_child.add_property_override(
-        #    "Runtime", cdk.Fn.condition_if(
-        #        self.is_global_region.logical_id, 'python3.10', 'python3.9'))
 
         if self.vpc_type and not self.aos_sg_is_associated:
             lambda_deploy_es.add_environment(
@@ -363,10 +350,13 @@ class AosDeployment(object):
             self.scope, 'LambdaConfigureAES',
             function_name=function_name,
             description=f'{self.SOLUTION_NAME} / opensearch configuration',
-            runtime=aws_lambda.Runtime.PYTHON_3_11,
+            runtime=aws_lambda.Runtime.PYTHON_3_14,
+            architecture=aws_lambda.Architecture.ARM_64,
             code=aws_lambda.Code.from_asset('../lambda/deploy_es'),
             handler='index.aes_config_handler',
-            memory_size=128,
+            # 1024 MB: 128 MB caused Runtime.OutOfMemory when configuring
+            # or updating the domain (loading saved objects etc). issue #481
+            memory_size=1024,
             timeout=cdk.Duration.seconds(600),
             reserved_concurrent_executions=1,
             environment={
@@ -403,18 +393,6 @@ class AosDeployment(object):
         )
         if not self.same_lambda_func_version(function_name):
             lambda_configure_es.current_version
-        lambda_configure_es.node.default_child.add_property_override(
-            "Architectures",
-            cdk.Fn.condition_if(
-                self.has_lambda_architectures_prop.logical_id,
-                [self.region_mapping.find_in_map(
-                    cdk.Aws.REGION, 'LambdaArch')],
-                cdk.Aws.NO_VALUE
-            )
-        )
-        # lambda_configure_es.node.default_child.add_property_override(
-        #    "Runtime", cdk.Fn.condition_if(
-        #        self.is_global_region.logical_id, 'python3.10', 'python3.9'))
 
         lambda_configure_es.node.default_child.add_property_override(
             "VpcConfig.SubnetIds",

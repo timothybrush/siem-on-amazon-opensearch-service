@@ -14,6 +14,7 @@ import json
 import logging
 import os
 import pathlib
+import re
 import secrets
 import string
 import time
@@ -650,6 +651,132 @@ def backup_content_to_s3(dir_name, content_type, content_name, content):
         return False
 
 
+def _parse_dashboards_version(version_str):
+    """Convert a Dashboards config id like '2.19.0' or '1.0.0-SNAPSHOT'
+    into a sortable tuple. Returns (0, 0, 0) if unparsable."""
+    nums = re.findall(r'\d+', str(version_str))
+    return tuple(int(n) for n in nums[:3]) if nums else (0, 0, 0)
+
+
+def _get_dashboards_version(dist_name, auth, cookies):
+    """Return the version of the running OpenSearch Dashboards (e.g.
+    '3.5.0'). Since 'single OpenSearch Dashboards' (service software
+    R20260428+), the Dashboards version can differ from the engine
+    version, so it must be obtained from the Dashboards status API."""
+    if dist_name == 'opensearch':
+        url = f'https://{ENDPOINT}/_dashboards/api/status'
+    else:
+        url = f'https://{ENDPOINT}/_plugin/kibana/api/status'
+    try:
+        response = requests.get(
+            url=url, cookies=cookies, auth=auth, timeout=30)
+        return response.json()['version']['number']
+    except Exception:
+        logger.warning('Failed to get dashboards version from status API')
+        return None
+
+
+def _has_user_modified_settings(settings_url, auth, cookies):
+    """Return True if the running Dashboards already has user-modified
+    Advanced Settings (any userValue other than buildNum). In that case
+    the settings must not be overwritten: they may be the user's own
+    customization or settings migrated from a previous version."""
+    try:
+        response = requests.get(
+            url=settings_url, cookies=cookies, auth=auth, timeout=30)
+        settings = response.json().get('settings', {})
+    except Exception:
+        logger.warning('Failed to get current advanced settings. '
+                       'Continuing as if none are set')
+        return False
+    # Ignore keys forced by the managed service itself
+    # (isOverridden: true, e.g. 'home:useNewHomePage'). They exist even
+    # on a brand-new domain and are not user customization.
+    user_keys = [k for k, v in settings.items()
+                 if k != 'buildNum' and isinstance(v, dict)
+                 and 'userValue' in v and not v.get('isOverridden')]
+    if user_keys:
+        logger.info('Advanced settings already customized '
+                    f'({len(user_keys)} keys e.g. {user_keys[:3]})')
+        return True
+    return False
+
+
+def apply_dashboards_config_settings(dist_name, auth, cookies,
+                                     config_objects):
+    """Apply Advanced Settings from exported 'config' saved objects.
+
+    OpenSearch Dashboards 3.x rejects 'config' type objects in
+    saved_objects/_import (unsupported_type), so the settings must be
+    applied through the Advanced Settings API instead. Select the config
+    whose id matches the running Dashboards version; if there is no
+    exact match, fall back to the newest one.
+
+    If the domain already has user-modified settings (e.g. the user
+    customized them, or they were migrated by a version upgrade), skip
+    to preserve them.
+    """
+    if not config_objects:
+        logger.info('No config objects to apply')
+        return
+
+    if dist_name == 'opensearch':
+        settings_url = (f'https://{ENDPOINT}/_dashboards/api/'
+                        'opensearch-dashboards/settings')
+    else:
+        settings_url = f'https://{ENDPOINT}/_plugin/kibana/api/kibana/settings'
+
+    if _has_user_modified_settings(settings_url, auth, cookies):
+        logger.info('Skipped applying advanced settings to preserve '
+                    'existing user configuration')
+        return
+
+    dashboards_version = _get_dashboards_version(dist_name, auth, cookies)
+    selected = None
+    if dashboards_version:
+        for obj in config_objects:
+            if obj.get('id') == dashboards_version:
+                selected = obj
+                break
+    if not selected:
+        # Fall back to the newest config. Exclude 7.x configs: they are
+        # for legacy Kibana (Elasticsearch 7.10) and would otherwise win
+        # the numeric comparison against OpenSearch versions (1.x-3.x).
+        candidates = [
+            o for o in config_objects
+            if _parse_dashboards_version(o['id']) < (7, 0, 0)]
+        if not candidates:
+            candidates = config_objects
+        selected = max(
+            candidates, key=lambda o: _parse_dashboards_version(o['id']))
+        logger.info(
+            f'No config matching dashboards version {dashboards_version}. '
+            f"Falling back to config {selected.get('id')}")
+    else:
+        logger.info(f"Applying config {selected.get('id')} that matches "
+                    f'dashboards version {dashboards_version}')
+
+    changes = {k: v for k, v in selected.get('attributes', {}).items()
+               if k != 'buildNum'}
+    if not changes:
+        logger.info('Selected config has no applicable settings')
+        return
+
+    if dist_name == 'opensearch':
+        headers = {'Content-Type': 'application/json', 'osd-xsrf': 'true'}
+    else:
+        headers = {'Content-Type': 'application/json', 'kbn-xsrf': 'true'}
+    response = requests.post(
+        url=settings_url, cookies=cookies, auth=auth, headers=headers,
+        json={'changes': changes})
+    if response.status_code == 200:
+        logger.info(f'Applied {len(changes)} advanced settings '
+                    f"from config {selected.get('id')}")
+    else:
+        logger.error('Failed to apply advanced settings: '
+                     f'{response.status_code} {response.text[:500]}')
+
+
 def import_saved_objects_into_aos(dist_name, auth, cookies):
     logger.info("import saved objects")
 
@@ -666,12 +793,37 @@ def import_saved_objects_into_aos(dist_name, auth, cookies):
         with ZipFile('dashboard.ndjson.zip') as new_dashboard_zip:
             new_dashboard_zip.extractall('/tmp/')
         if os.path.exists('/tmp/dashboard.ndjson'):
-            with open('/tmp/dashboard.ndjson', 'rb') as fd:
-                # confirmd and ignored Rule-645108
-                response = requests.post(
-                    url=url, cookies=cookies, files={'file': fd},
-                    headers=headers, auth=auth)
-                logger.info(response.text)
+            # The saved objects file contains version-pinned "config" objects
+            # (Advanced Settings). The OpenSearch Dashboards 3.x
+            # saved_objects/_import API rejects them with "unsupported_type",
+            # which makes the whole import fail (successCount=0). Strip the
+            # config objects from the import payload and keep them so their
+            # settings can be applied through the Advanced Settings API
+            # afterwards (see apply_dashboards_config_settings).
+            config_objects = []
+            with open('/tmp/dashboard.ndjson', encoding='utf-8') as fd:
+                lines = []
+                for line in fd:
+                    if not line.strip():
+                        continue
+                    try:
+                        obj = json.loads(line)
+                    except json.JSONDecodeError:
+                        lines.append(line)
+                        continue
+                    if obj.get('type') == 'config':
+                        config_objects.append(obj)
+                        continue
+                    lines.append(line)
+            payload = ''.join(lines).encode('utf-8')
+            # confirmd and ignored Rule-645108
+            response = requests.post(
+                url=url, cookies=cookies,
+                files={'file': ('dashboard.ndjson', payload)},
+                headers=headers, auth=auth)
+            logger.info(response.text)
+            apply_dashboards_config_settings(
+                dist_name, auth, cookies, config_objects)
         else:
             logger.error('dashboard.ndjson is not contained')
 

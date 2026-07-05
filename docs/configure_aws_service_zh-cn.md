@@ -32,7 +32,7 @@
 1. [分析](#7-Analytics)
     * [Amazon Managed Streaming for Apache Kafka (Amazon MSK)](#Amazon-MSK)
 1. [计算](#8-Compute)
-    * [EC2 Instance (Amazon Linux 2)](#EC2-Instance-Amazon-Linux-2)
+    * [EC2 Instance (Amazon Linux 2023)](#EC2-Instance-Amazon-Linux-2023)
     * [EC2 Instance (Microsoft Windows Server 2012/2016/2019)](#EC2-Instance-Microsoft-Windows-Server-201220162019)
 1. [容器](#9-Containers)
     * [FireLens for Amazon ECS](#FireLens-for-Amazon-ECS)
@@ -228,7 +228,7 @@ s3_key初始值：`(TrustedAdvisor |trustedadvisor)` 无需设置初始值，Lam
 
 ### Route 53 Resolver VPC DNS 查询日志
 
-![Amazon Linux 2 to S3](images/route53resolver-to-s3.jpg)
+![Route 53 Resolver to S3](images/route53resolver-to-s3.jpg)
 
 The initial value of s3_key: `vpcdnsquerylogs` (part of the default output path)
 
@@ -410,9 +410,9 @@ s3_key 的初始值：`KafkaBrokerLogs`（默认输出路径的一部分）
 
 ## 8. 计算
 
-### EC2 Instance (Amazon Linux 2)
+### EC2 Instance (Amazon Linux 2023)
 
-![Amazon Linux 2 to S3](images/al2-to-s3.jpg)
+![Amazon Linux 2023 to S3](images/al2-to-s3.jpg)
 
 操作系统系统日志 -
 s3_key的初始值：`/[Ll]inux/`（在Firehose输出路径中指定）
@@ -424,7 +424,7 @@ s3_key的初始值：`[Ll]inux.?[Ss]ecure`（在Firehose输出路径中指定）
 
 请按照如下步骤配置
 
-1. 在Amazon Linux 2 的 EC2 实例中部署安装 CloudWatch Agent，具体步骤请参考 [快速入门：在运行的 EC2 Linux 实例上安装和配置 CloudWatch Logs 代理](https://docs.aws.amazon.com/zh_cn/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html)
+1. 在 Amazon Linux 2023 的 EC2 实例中部署安装 CloudWatch Agent，具体步骤请参考 [快速入门：在运行的 EC2 Linux 实例上安装和配置 CloudWatch Logs 代理](https://docs.aws.amazon.com/zh_cn/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html)
 1. 将日志转发到 CloudWatch Logs
 1. 使用 CloudWatch Logs 订阅将日志输出到 Firehose
 1. 选择 S3 存储桶作为 Firehose 输出的目的地

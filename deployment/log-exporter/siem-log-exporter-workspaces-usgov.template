@@ -63,6 +63,8 @@ Resources:
   lambdaGetWorkspacesInventory04954C41:
     Type: AWS::Lambda::Function
     Properties:
+      Architectures:
+        - arm64
       Code:
         ZipFile: |
           # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -167,7 +169,7 @@ Resources:
         Fn::GetAtt:
           - getWorkspacesInventoryRoleC66252C0
           - Arn
-      Runtime: python3.11
+      Runtime: python3.14
       Timeout: 600
     DependsOn:
       - getWorkspacesInventoryRoleC66252C0
@@ -284,6 +286,8 @@ Mappings:
       FirehoseCidrBlock: 13.244.121.224/27
     ap-east-1:
       FirehoseCidrBlock: 18.162.221.32/27
+    ap-east-2:
+      FirehoseCidrBlock: 43.212.53.160/27
     ap-northeast-1:
       FirehoseCidrBlock: 13.113.196.224/27
     ap-northeast-2:

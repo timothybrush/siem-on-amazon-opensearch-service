@@ -36,7 +36,7 @@ On this page, we’ll walk you through how to load logs from each AWS service in
     * [Amazon OpenSearch Service](#amazon-opensearch-service)
     * [Amazon Managed Streaming for Apache Kafka (Amazon MSK)](#amazon-msk)
 1. [Compute](#8-compute)
-    * [EC2 Instance (Amazon Linux 2/2023)](#ec2-instance-amazon-linux-22023)
+    * [EC2 Instance (Amazon Linux 2023)](#ec2-instance-amazon-linux-2023)
     * [EC2 Instance (Microsoft Windows Server 2012/2016/2019)](#ec2-instance-microsoft-windows-server-201220162019)
     * [Apache Web Server on Amazon Linux](#apache-web-server-on-amazon-linux)
     * [NGINX Web Server on Amazon Linux](#nginx-web-server-on-amazon-linux)
@@ -428,7 +428,7 @@ Configuring Amazon CloudFront:
 
 ### Route 53 Resolver VPC DNS Query Logging
 
-![Amazon Linux 2 to S3](images/route53resolver-to-s3.jpg)
+![Route 53 Resolver to S3](images/route53resolver-to-s3.jpg)
 
 The initial value of s3_key: `vpcdnsquerylogs` (part of the default output path)
 
@@ -689,9 +689,9 @@ To export OpenSearch audit logs to CloudWatch Logs, see Developer Guide [Monitor
 
 ## 8. Compute
 
-### EC2 Instance (Amazon Linux 2/2023)
+### EC2 Instance (Amazon Linux 2023)
 
-![Amazon Linux 2 to S3](images/al2-to-s3.jpg)
+![Amazon Linux 2023 to S3](images/al2-to-s3.jpg)
 
 * OS system logs
   * The initial value of s3_key: `/[Ll]inux/` (specified in the Firehose output path)
@@ -714,16 +714,11 @@ The following are examples of sending logs to the S3 log bucket from Amazon Linu
     * ssm:PutParameter
     * ssm:UpdateInstanceInformation
 
-1. Install CloudWatch Agent on EC2 instances deployed with Amazon Linux 2023 (AL2023) or Amazon Linux 2 (AL2). Install rsyslog additionally for AL2023.
+1. Install CloudWatch Agent on EC2 instances deployed with Amazon Linux 2023 (AL2023). Install rsyslog additionally.
 
     ```sh
     # Amazon Linux 2023
     sudo dnf install -y amazon-cloudwatch-agent rsyslog
-    ```
-
-    ```sh
-    # Amazon Linux 2
-    sudo yum install -y amazon-cloudwatch-agent
     ```
 
     For information, see the official documentations: [Installing the CloudWatch agent](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-on-EC2-Instance.html)
@@ -846,9 +841,9 @@ Here’s an outline of the steps:
 
 ### Apache Web Server on Amazon Linux
 
-You can import Apache logs that format is Common Log Format (CLF), Combined Log Format (combined), combinedio, and X-Forwarded-For added at the **beginning** installed on Amazon Linux 2023 or Amazon Linux 2.
+You can import Apache logs that format is Common Log Format (CLF), Combined Log Format (combined), combinedio, and X-Forwarded-For added at the **beginning** installed on Amazon Linux 2023.
 
-![Amazon Linux 2 to S3](images/al2-to-s3.jpg)
+![Amazon Linux 2023 to S3](images/al2-to-s3.jpg)
 
 * Apache access log
   * The initial value of s3_key: `[Aa]pache.*[Aa]ccess/` (specified in the Firehose output path)
@@ -863,7 +858,7 @@ If you want to collect all logs from multiple websites (e.g. blog.example.net, s
 
 1. Create an IAM role and attach it to an EC2 instance
 
-    See [EC2 Instance (Amazon Linux 2/2023)](#ec2-instance-amazon-linux-22023)
+    See [EC2 Instance (Amazon Linux 2023)](#ec2-instance-amazon-linux-2023)
 
 1. Install Apache Web Server
 
@@ -875,7 +870,7 @@ If you want to collect all logs from multiple websites (e.g. blog.example.net, s
 
     The steps are an example configuration to forward logs to CloudWatch Logs. Please change the input values ​​as appropriate, including settings for Cloud Watch Metrics, etc. Save your configuration in AWS Systems Manager Parameter Store. Subsequent EC2 instances use configuration files saved in Parameter Store, so this step is not necessary.
 
-    If you also want to transfer Linux OS logs, please refer to [EC2 Instance (Amazon Linux 2/2023)](#ec2-instance-amazon-linux-22023) and combine them.
+    If you also want to transfer Linux OS logs, please refer to [EC2 Instance (Amazon Linux 2023)](#ec2-instance-amazon-linux-2023) and combine them.
 
     ```sh
     sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-config-wizard
@@ -963,9 +958,9 @@ If you want to collect all logs from multiple websites (e.g. blog.example.net, s
 
 ### NGINX Web Server on Amazon Linux
 
-You can import NGINX logs that format is Combined Log Format (combined) and X-Forwarded-For added at the **end** installed on Amazon Linux 2023 or Amazon Linux 2.
+You can import NGINX logs that format is Combined Log Format (combined) and X-Forwarded-For added at the **end** installed on Amazon Linux 2023.
 
-![Amazon Linux 2 to S3](images/al2-to-s3.jpg)
+![Amazon Linux 2023 to S3](images/al2-to-s3.jpg)
 
 * NGINX access log
   * The initial value of s3_key: `[Nn]ginx.*[Aa]ccess/` (specified in the Firehose output path)
@@ -980,7 +975,7 @@ If you want to collect all logs from multiple websites (e.g. blog.example.net, s
 
 1. Create an IAM role and attach it to an EC2 instance
 
-    See [EC2 Instance (Amazon Linux 2/2023)](#ec2-instance-amazon-linux-22023)
+    See [EC2 Instance (Amazon Linux 2023)](#ec2-instance-amazon-linux-2023)
 
 1. Install NGINX Web Server
 
@@ -1006,7 +1001,7 @@ If you want to collect all logs from multiple websites (e.g. blog.example.net, s
 
     The steps are an example configuration to forward logs to CloudWatch Logs. Please change the input values ​​as appropriate, including settings for Cloud Watch Metrics, etc. Save your configuration in AWS Systems Manager Parameter Store. Subsequent EC2 instances use configuration files saved in Parameter Store, so this step is not necessary.
 
-    If you also want to transfer Linux OS logs, please refer to [EC2 Instance (Amazon Linux 2/2023)](#ec2-instance-amazon-linux-22023) and combine them.
+    If you also want to transfer Linux OS logs, please refer to [EC2 Instance (Amazon Linux 2023)](#ec2-instance-amazon-linux-2023) and combine them.
 
     ```sh
     sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-config-wizard

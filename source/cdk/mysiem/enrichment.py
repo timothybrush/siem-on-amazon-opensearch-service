@@ -38,8 +38,6 @@ class Enrichment(object):
         self.otx_api_key = cfn_parameters_dict['otx_api_key']
         self.enable_abuse_ch = cfn_parameters_dict['enable_abuse_ch']
 
-        self.has_lambda_architectures_prop = (
-            cfn_conditions_dict['has_lambda_architectures_prop'])
         self.is_global_region = cfn_conditions_dict['is_global_region']
         self.has_geoip_license = cfn_conditions_dict['has_geoip_license']
         self.enable_ioc = cfn_conditions_dict['enable_ioc']
@@ -52,7 +50,8 @@ class Enrichment(object):
             self.scope, 'LambdaGeoipDownloader',
             function_name=function_name,
             description=f'{self.SOLUTION_NAME} / geoip-downloader',
-            runtime=aws_lambda.Runtime.PYTHON_3_11,
+            runtime=aws_lambda.Runtime.PYTHON_3_14,
+            architecture=aws_lambda.Architecture.ARM_64,
             code=aws_lambda.Code.from_asset('../lambda/geoip_downloader'),
             handler='index.lambda_handler',
             memory_size=320,
@@ -70,18 +69,6 @@ class Enrichment(object):
         )
         if not self.same_lambda_func_version(function_name):
             lambda_geo.current_version
-        lambda_geo.node.default_child.add_property_override(
-            "Architectures",
-            cdk.Fn.condition_if(
-                self.has_lambda_architectures_prop.logical_id,
-                [self.region_mapping.find_in_map(
-                    cdk.Aws.REGION, 'LambdaArch')],
-                cdk.Aws.NO_VALUE
-            )
-        )
-        # lambda_geo.node.default_child.add_property_override(
-        #    "Runtime", cdk.Fn.condition_if(
-        #        self.is_global_region.logical_id, 'python3.10', 'python3.9'))
 
         # Download geoip to S3 once by executing lambda_geo
         get_geodb = aws_cloudformation.CfnCustomResource(
@@ -113,7 +100,8 @@ class Enrichment(object):
             self.scope, 'LambdaIocPlan',
             function_name=function_name,
             description=f'{self.SOLUTION_NAME} / ioc-plan',
-            runtime=aws_lambda.Runtime.PYTHON_3_11,
+            runtime=aws_lambda.Runtime.PYTHON_3_14,
+            architecture=aws_lambda.Architecture.ARM_64,
             code=aws_lambda.Code.from_asset('../lambda/ioc_database'),
             handler='lambda_function.plan',
             memory_size=128,
@@ -133,25 +121,14 @@ class Enrichment(object):
         )
         if not self.same_lambda_func_version(function_name):
             lambda_ioc_plan.current_version
-        lambda_ioc_plan.node.default_child.add_property_override(
-            "Architectures",
-            cdk.Fn.condition_if(
-                self.has_lambda_architectures_prop.logical_id,
-                [self.region_mapping.find_in_map(
-                    cdk.Aws.REGION, 'LambdaArch')],
-                cdk.Aws.NO_VALUE
-            )
-        )
-        # lambda_ioc_plan.node.default_child.add_property_override(
-        #    "Runtime", cdk.Fn.condition_if(
-        #        self.is_global_region.logical_id, 'python3.10', 'python3.9'))
 
         function_name = 'aes-siem-ioc-download'
         lambda_ioc_download = aws_lambda.Function(
             self.scope, 'LambdaIocDownload',
             function_name=function_name,
             description=f'{self.SOLUTION_NAME} / ioc-download',
-            runtime=aws_lambda.Runtime.PYTHON_3_11,
+            runtime=aws_lambda.Runtime.PYTHON_3_14,
+            architecture=aws_lambda.Architecture.ARM_64,
             code=aws_lambda.Code.from_asset('../lambda/ioc_database'),
             handler='lambda_function.download',
             memory_size=384,
@@ -177,25 +154,14 @@ class Enrichment(object):
         )
         if not self.same_lambda_func_version(function_name):
             lambda_ioc_download.current_version
-        lambda_ioc_download.node.default_child.add_property_override(
-            "Architectures",
-            cdk.Fn.condition_if(
-                self.has_lambda_architectures_prop.logical_id,
-                [self.region_mapping.find_in_map(
-                    cdk.Aws.REGION, 'LambdaArch')],
-                cdk.Aws.NO_VALUE
-            )
-        )
-        # lambda_ioc_download.node.default_child.add_property_override(
-        #    "Runtime", cdk.Fn.condition_if(
-        #        self.is_global_region.logical_id, 'python3.10', 'python3.9'))
 
         function_name = 'aes-siem-ioc-createdb'
         lambda_ioc_createdb = aws_lambda.Function(
             self.scope, 'LambdaIocCreatedb',
             function_name=function_name,
             description=f'{self.SOLUTION_NAME} / ioc-createdb',
-            runtime=aws_lambda.Runtime.PYTHON_3_11,
+            runtime=aws_lambda.Runtime.PYTHON_3_14,
+            architecture=aws_lambda.Architecture.ARM_64,
             code=aws_lambda.Code.from_asset('../lambda/ioc_database'),
             handler='lambda_function.createdb',
             memory_size=1024,
@@ -211,18 +177,6 @@ class Enrichment(object):
         )
         if not self.same_lambda_func_version(function_name):
             lambda_ioc_createdb.current_version
-        lambda_ioc_createdb.node.default_child.add_property_override(
-            "Architectures",
-            cdk.Fn.condition_if(
-                self.has_lambda_architectures_prop.logical_id,
-                [self.region_mapping.find_in_map(
-                    cdk.Aws.REGION, 'LambdaArch')],
-                cdk.Aws.NO_VALUE
-            )
-        )
-        # lambda_ioc_createdb.node.default_child.add_property_override(
-        #    "Runtime", cdk.Fn.condition_if(
-        #        self.is_global_region.logical_id, 'python3.10', 'python3.9'))
 
         task_ioc_plan = aws_stepfunctions_tasks.LambdaInvoke(
             self.scope, "IocPlan",

@@ -56,6 +56,8 @@ Resources:
   lambdaGetTrustedAdvisorCheckResultAAF8022E:
     Type: AWS::Lambda::Function
     Properties:
+      Architectures:
+        - arm64
       Code:
         ZipFile: |
           # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -137,7 +139,8 @@ Resources:
                   checkId=check['id'])
               jsonobj = {
                   'requestid': res['ResponseMetadata']['RequestId'],
-                  'creation_date': datetime.datetime.utcnow().isoformat(),
+                  'creation_date': datetime.datetime.now(
+                      datetime.timezone.utc).replace(tzinfo=None).isoformat(),
                   'account': AWS_ID, 'check': check, 'result': copy.copy(res['result']),
                   'refreshable': check['id'] not in UNREFRESHABLE_CHECK_IDS}
               if is_enable_japanese:
@@ -184,7 +187,7 @@ Resources:
         Fn::GetAtt:
           - getTrustedAdvisorCheckResultRoleF50F3B65
           - Arn
-      Runtime: python3.11
+      Runtime: python3.14
       Timeout: 600
     DependsOn:
       - getTrustedAdvisorCheckResultRoleF50F3B65

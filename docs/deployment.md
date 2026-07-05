@@ -54,30 +54,14 @@ Skip these steps if you want to send logs from your existing S3 bucket to SIEM o
 
 ### 1. Setting Up the AWS CDK Execution Environment
 
-1. Deploy an Amazon Elastic Compute Cloud (Amazon EC2) instance that runs Amazon Linux 2023 or Amazon Linux 2. The EC instance require at least 2 GB RAM
+1. Deploy an Amazon Elastic Compute Cloud (Amazon EC2) instance that runs Amazon Linux 2023. The EC instance require at least 2 GB RAM
 1. Create a role with Admin permissions in AWS Identity and Access Management (IAM) and attach it to the Amazon EC2 instance
-1. Log in to the shell; install the development tools, Python 3.11 and development files, git, jq and tar; and get the source code from GitHub
-
-    For Amazon Linux 2023
+1. Log in to the shell; install the development tools, Python 3.14 and development files, git, jq and tar; and get the source code from GitHub
 
     ```shell
     export GIT_ROOT=$HOME
     cd ${GIT_ROOT}
-    sudo dnf install -y python3.11 python3.11-devel python3.11-pip git jq tar
-    git clone https://github.com/aws-samples/siem-on-amazon-opensearch-service.git
-    ```
-
-    For Amazon Linux 2
-
-    > **_Note:_** With this solution, deployment with CDK on Amazon Linux 2 is deprecated
-
-    ```shell
-    export GIT_ROOT=$HOME
-    cd ${GIT_ROOT}
-    sudo yum install -y amazon-linux-extras
-    sudo amazon-linux-extras enable python3.8
-    sudo yum install -y python38 python38-devel git jq tar
-    sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
+    sudo dnf install -y python3.14 python3.14-devel python3.14-pip git jq tar
     git clone https://github.com/aws-samples/siem-on-amazon-opensearch-service.git
     ```
 

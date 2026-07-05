@@ -77,7 +77,8 @@ def query_and_transform_and_save(f, check):
         checkId=check['id'])
     jsonobj = {
         'requestid': res['ResponseMetadata']['RequestId'],
-        'creation_date': datetime.datetime.utcnow().isoformat(),
+        'creation_date': datetime.datetime.now(
+            datetime.timezone.utc).replace(tzinfo=None).isoformat(),
         'account': AWS_ID, 'check': check, 'result': copy.copy(res['result']),
         'refreshable': check['id'] not in UNREFRESHABLE_CHECK_IDS}
     if is_enable_japanese:

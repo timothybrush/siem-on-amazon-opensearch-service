@@ -76,9 +76,9 @@ Then create a Lambda layer following the steps below:
    * Check Upload a .zip file
    * Choose Upload and then select configure-es-loader.zip
    * Compatible architectures: Leave blank. Do **NOT** select anything
-   * Compatible runtimes: Choose [**Python 3.11**] and [**Python 3.13**] (check current runtime version from **aes-siem-es-loader** layers pane)
+   * Compatible runtimes: Leave blank. Do **NOT** select anything
+       * user.ini is a plain text file and does not depend on any specific runtime. This field is descriptive metadata only and does not affect how the layer works: the layer can be attached and its user.ini is loaded at runtime regardless of what is selected here (or nothing at all). Your user.ini stays effective even after a future SIEM update changes the es-loader runtime version. Specifying a particular version can be misleading when it no longer matches the actual runtime, so leaving it blank is recommended
 1. Choose [**Create**]
-1. After creation, select [Layers] from the left menu and verify that the above versions are included in [Compatible versions] for the created layer
 
 Finally, add the Lambda layer that you have just created to Lambda function es-loader:
 
@@ -780,10 +780,10 @@ You can batch load logs stored in the S3 bucket into OpenSearch Service. Normall
    ```python
    export GIT_ROOT=$HOME
    cd ${GIT_ROOT}/siem-on-amazon-opensearch-service/source/lambda/es_loader/
-   python3.11 -m pip install -r requirements.txt -U -t .
-   python3.11 -m pip install awswrangler -U
+   python3.14 -m pip install -r requirements.txt -U -t .
+   python3.14 -m pip install awswrangler -U
 
-   ln -sf /usr/bin/python3.11 ${GIT_ROOT}/siem-on-amazon-opensearch-service/python3
+   ln -sf /usr/bin/python3.14 ${GIT_ROOT}/siem-on-amazon-opensearch-service/python3
    PATH=${GIT_ROOT}/siem-on-amazon-opensearch-service/:$PATH
    ```
 
@@ -963,7 +963,7 @@ The following instance and tools need to be in place so that you can create a Cl
 
 * Amazon EC2 instance running Amazon Linux 2023
   * "Development Tools"
-  * Python 3.11, libraries and header files
+  * Python 3.14, libraries and header files
   * pip
   * Git
 
@@ -973,7 +973,7 @@ Run the following commands if the above tools have not been installed yet:
 export GIT_ROOT=$HOME
 cd ${GIT_ROOT}
 sudo dnf groupinstall -y "Development Tools"
-sudo dnf install -y python3.11 python3.11-devel python3.11-pip git jq tar
+sudo dnf install -y python3.14 python3.14-devel python3.14-pip git jq tar
 ```
 
 ### 2. Cloning SIEM on OpenSearch Service

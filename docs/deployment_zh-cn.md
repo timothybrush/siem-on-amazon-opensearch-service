@@ -53,18 +53,14 @@
 
 ### 1. 设置 AWS CDK 运行环境
 
-1. 部署一个运行 Amazon Linux 2 (x86) 的 Amazon Elastic Compute Cloud (Amazon EC2) 实例
+1. 部署一个运行 Amazon Linux 2023 的 Amazon Elastic Compute Cloud (Amazon EC2) 实例
 1. 在 AWS Identity and Access Management (IAM) 中创建一个具有管理员权限的角色并将其附加到 Amazon EC2 实例
-1. 登录shell； 安装开发工具、Python 3.8 和开发相关文件、git、jq 和 tar； 并从 GitHub 获取源代码。
+1. 登录shell； 安装开发工具、Python 3.14 和开发相关文件、git、jq 和 tar； 并从 GitHub 获取源代码。
 
    ```shell
    export GIT_ROOT=$HOME
    cd ${GIT_ROOT}
-   sudo yum groups mark install -y "Development Tools"
-   sudo yum install -y amazon-linux-extras
-   sudo amazon-linux-extras enable python3.8
-   sudo yum install -y python38 python38-devel git jq tar
-   sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
+   sudo dnf install -y python3.14 python3.14-devel python3.14-pip git jq tar
    git clone https://github.com/aws-samples/siem-on-amazon-opensearch-service.git
    ```
 

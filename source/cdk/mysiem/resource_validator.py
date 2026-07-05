@@ -32,8 +32,6 @@ class ResourceValidator(object):
         self.log_bucket_policy_update = (
             cfn_parameters_dict['log_bucket_policy_update'])
         self.vpce_id = cfn_parameters_dict['vpce_id']
-        self.has_lambda_architectures_prop = (
-            cfn_conditions_dict['has_lambda_architectures_prop'])
         self.is_global_region = cfn_conditions_dict['is_global_region']
         self.region_mapping = region_mapping
 
@@ -45,7 +43,8 @@ class ResourceValidator(object):
             function_name=function_name,
             description=(f'{self.SOLUTION_NAME} / resource validator '
                          'for deployment'),
-            runtime=aws_lambda.Runtime.PYTHON_3_11,
+            runtime=aws_lambda.Runtime.PYTHON_3_14,
+            architecture=aws_lambda.Architecture.ARM_64,
             code=aws_lambda.Code.from_asset('../lambda/deploy_es'),
             handler='index.resource_validator_handler',
             memory_size=128,
@@ -68,18 +67,6 @@ class ResourceValidator(object):
         )
         if not self.same_lambda_func_version(function_name):
             lambda_resource_validator.current_version
-        lambda_resource_validator.node.default_child.add_property_override(
-            "Architectures",
-            cdk.Fn.condition_if(
-                self.has_lambda_architectures_prop.logical_id,
-                [self.region_mapping.find_in_map(
-                    cdk.Aws.REGION, 'LambdaArch')],
-                cdk.Aws.NO_VALUE
-            )
-        )
-        # lambda_resource_validator.node.default_child.add_property_override(
-        #    "Runtime", cdk.Fn.condition_if(
-        #        self.is_global_region.logical_id, 'python3.11', 'python3.10'))
 
         validator_inline_policy = aws_iam.Policy(
             self.scope, 'aes-siem-policy-for-vpc-validation',

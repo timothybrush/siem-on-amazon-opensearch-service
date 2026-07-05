@@ -24,6 +24,8 @@ events
 fastjsonschema*
 frozenlist*
 geoip2*
+google
+grpc*
 idna*
 ijson*
 jmespath*
@@ -32,10 +34,15 @@ libfuturize*
 libpasteurize*
 maxminddb*
 multidict*
-opensearch_py*
+# do NOT use bare "opensearch*": it also ignores
+# source/saved_objects/config/opensearch_*.ndjson
+opensearch/
+opensearch_protobufs-*
+opensearch_py-*
 opensearchpy
 past*
 propcache*
+protobuf*
 python_dateutil-2.8.1*
 requests*
 s3transfer*
